@@ -1,6 +1,8 @@
-# Color [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/fatih/color) [![Build Status](http://img.shields.io/travis/fatih/color.svg?style=flat-square)](https://travis-ci.org/fatih/color)
+## Package information
 
+This package has been edited in order to use multiple Output stream instead of One global, this is a fork of [fatih/color](https://github.com/fatih/color).
 
+-------
 
 Color lets you use colorized outputs in terms of [ANSI Escape
 Codes](http://en.wikipedia.org/wiki/ANSI_escape_code#Colors) in Go (Golang). It
@@ -15,7 +17,7 @@ suits you.
 ## Install
 
 ```bash
-go get github.com/fatih/color
+go get github.com/iris-contrib/color
 ```
 
 ## Examples
@@ -137,18 +139,7 @@ c.EnableColor()
 c.Println("This prints again cyan...")
 ```
 
-## Todo
-
-* Save/Return previous values
-* Evaluate fmt.Formatter interface
-
-
-## Credits
-
- * [Fatih Arslan](https://github.com/fatih)
- * Windows support via @mattn: [colorable](https://github.com/mattn/go-colorable)
-
 ## License
 
-The MIT License (MIT) - see [`LICENSE.md`](https://github.com/fatih/color/blob/master/LICENSE.md) for more details
+The MIT License (MIT) - see [LICENSE](LICENSE) for more details
 

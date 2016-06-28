@@ -13,7 +13,7 @@ import (
 // Each visual test includes the color name to be compared.
 func TestColor(t *testing.T) {
 	rb := new(bytes.Buffer)
-	Output = rb
+	DefaultOutput = rb
 
 	NoColor = false
 
@@ -40,7 +40,7 @@ func TestColor(t *testing.T) {
 	}
 
 	for _, c := range testColors {
-		New(c.code).Print(c.text)
+		Default(c.code).Print(c.text)
 
 		line, _ := rb.ReadString('\n')
 		scannedLine := fmt.Sprintf("%q", line)
@@ -56,13 +56,13 @@ func TestColor(t *testing.T) {
 }
 
 func TestColorEquals(t *testing.T) {
-	fgblack1 := New(FgBlack)
-	fgblack2 := New(FgBlack)
-	bgblack := New(BgBlack)
-	fgbgblack := New(FgBlack, BgBlack)
-	fgblackbgred := New(FgBlack, BgRed)
-	fgred := New(FgRed)
-	bgred := New(BgRed)
+	fgblack1 := Default(FgBlack)
+	fgblack2 := Default(FgBlack)
+	bgblack := Default(BgBlack)
+	fgbgblack := Default(FgBlack, BgBlack)
+	fgblackbgred := Default(FgBlack, BgRed)
+	fgred := Default(FgRed)
+	bgred := Default(BgRed)
 
 	if !fgblack1.Equals(fgblack2) {
 		t.Error("Two black colors are not equal")
@@ -91,7 +91,7 @@ func TestColorEquals(t *testing.T) {
 
 func TestNoColor(t *testing.T) {
 	rb := new(bytes.Buffer)
-	Output = rb
+	DefaultOutput = rb
 
 	testColors := []struct {
 		text string
@@ -116,7 +116,7 @@ func TestNoColor(t *testing.T) {
 	}
 
 	for _, c := range testColors {
-		p := New(c.code)
+		p := Default(c.code)
 		p.DisableColor()
 		p.Print(c.text)
 
@@ -132,7 +132,7 @@ func TestNoColor(t *testing.T) {
 		NoColor = false
 	}()
 	for _, c := range testColors {
-		p := New(c.code)
+		p := Default(c.code)
 		p.Print(c.text)
 
 		line, _ := rb.ReadString('\n')
@@ -145,35 +145,35 @@ func TestNoColor(t *testing.T) {
 
 func TestColorVisual(t *testing.T) {
 	// First Visual Test
-	Output = colorable.NewColorableStdout()
+	DefaultOutput = colorable.NewColorableStdout()
 
-	New(FgRed).Printf("red\t")
-	New(BgRed).Print("         ")
-	New(FgRed, Bold).Println(" red")
+	Default(FgRed).Printf("red\t")
+	Default(BgRed).Print("         ")
+	Default(FgRed, Bold).Println(" red")
 
-	New(FgGreen).Printf("green\t")
-	New(BgGreen).Print("         ")
-	New(FgGreen, Bold).Println(" green")
+	Default(FgGreen).Printf("green\t")
+	Default(BgGreen).Print("         ")
+	Default(FgGreen, Bold).Println(" green")
 
-	New(FgYellow).Printf("yellow\t")
-	New(BgYellow).Print("         ")
-	New(FgYellow, Bold).Println(" yellow")
+	Default(FgYellow).Printf("yellow\t")
+	Default(BgYellow).Print("         ")
+	Default(FgYellow, Bold).Println(" yellow")
 
-	New(FgBlue).Printf("blue\t")
-	New(BgBlue).Print("         ")
-	New(FgBlue, Bold).Println(" blue")
+	Default(FgBlue).Printf("blue\t")
+	Default(BgBlue).Print("         ")
+	Default(FgBlue, Bold).Println(" blue")
 
-	New(FgMagenta).Printf("magenta\t")
-	New(BgMagenta).Print("         ")
-	New(FgMagenta, Bold).Println(" magenta")
+	Default(FgMagenta).Printf("magenta\t")
+	Default(BgMagenta).Print("         ")
+	Default(FgMagenta, Bold).Println(" magenta")
 
-	New(FgCyan).Printf("cyan\t")
-	New(BgCyan).Print("         ")
-	New(FgCyan, Bold).Println(" cyan")
+	Default(FgCyan).Printf("cyan\t")
+	Default(BgCyan).Print("         ")
+	Default(FgCyan, Bold).Println(" cyan")
 
-	New(FgWhite).Printf("white\t")
-	New(BgWhite).Print("         ")
-	New(FgWhite, Bold).Println(" white")
+	Default(FgWhite).Printf("white\t")
+	Default(BgWhite).Print("         ")
+	Default(FgWhite, Bold).Println(" white")
 	fmt.Println("")
 
 	// Second Visual test
@@ -198,29 +198,29 @@ func TestColorVisual(t *testing.T) {
 
 	// Fourth Visual test
 	fmt.Println()
-	blue := New(FgBlue).PrintlnFunc()
+	blue := Default(FgBlue).PrintlnFunc()
 	blue("blue text with custom print func")
 
-	red := New(FgRed).PrintfFunc()
+	red := Default(FgRed).PrintfFunc()
 	red("red text with a printf func: %d\n", 123)
 
-	put := New(FgYellow).SprintFunc()
-	warn := New(FgRed).SprintFunc()
+	put := Default(FgYellow).SprintFunc()
+	warn := Default(FgRed).SprintFunc()
 
-	fmt.Fprintf(Output, "this is a %s and this is %s.\n", put("warning"), warn("error"))
+	fmt.Fprintf(DefaultOutput, "this is a %s and this is %s.\n", put("warning"), warn("error"))
 
-	info := New(FgWhite, BgGreen).SprintFunc()
-	fmt.Fprintf(Output, "this %s rocks!\n", info("package"))
+	info := Default(FgWhite, BgGreen).SprintFunc()
+	fmt.Fprintf(DefaultOutput, "this %s rocks!\n", info("package"))
 
 	// Fifth Visual Test
 	fmt.Println()
 
-	fmt.Fprintln(Output, BlackString("black"))
-	fmt.Fprintln(Output, RedString("red"))
-	fmt.Fprintln(Output, GreenString("green"))
-	fmt.Fprintln(Output, YellowString("yellow"))
-	fmt.Fprintln(Output, BlueString("blue"))
-	fmt.Fprintln(Output, MagentaString("magenta"))
-	fmt.Fprintln(Output, CyanString("cyan"))
-	fmt.Fprintln(Output, WhiteString("white"))
+	fmt.Fprintln(DefaultOutput, BlackString("black"))
+	fmt.Fprintln(DefaultOutput, RedString("red"))
+	fmt.Fprintln(DefaultOutput, GreenString("green"))
+	fmt.Fprintln(DefaultOutput, YellowString("yellow"))
+	fmt.Fprintln(DefaultOutput, BlueString("blue"))
+	fmt.Fprintln(DefaultOutput, MagentaString("magenta"))
+	fmt.Fprintln(DefaultOutput, CyanString("cyan"))
+	fmt.Fprintln(DefaultOutput, WhiteString("white"))
 }
