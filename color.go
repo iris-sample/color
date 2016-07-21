@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
@@ -26,6 +27,7 @@ type Color struct {
 	Output  io.Writer
 	params  []Attribute
 	noColor *bool
+	mu      sync.Mutex
 }
 
 // Attribute defines a single SGR Code
@@ -241,9 +243,13 @@ func (c *Color) SprintlnFunc() func(a ...interface{}) string {
 // sequence returns a formated SGR sequence to be plugged into a "\x1b[...m"
 // an example output might be: "1;36" -> bold cyan
 func (c *Color) sequence() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	format := make([]string, len(c.params))
 	for i, v := range c.params {
-		format[i] = strconv.Itoa(int(v))
+		if len(format) > i {
+			format[i] = strconv.Itoa(int(v))
+		}
 	}
 
 	return strings.Join(format, ";")
